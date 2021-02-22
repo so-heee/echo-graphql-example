@@ -1,0 +1,10 @@
+version: '3'
+services:
+  app:
+    build: .
+    ports:
+      - 1323:1323
+    volumes:
+      - .:/go/src/github.com/so-heee/echo-graphql-example
+    tty: true
+    command: realize start
