@@ -1,19 +1,17 @@
 package main
 
 import (
-	"fmt"
 	"log"
-	"net/http"
 
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/kelseyhightower/envconfig"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/so-heee/echo-graphql-example/graph"
+	"github.com/so-heee/echo-graphql-example/graph/database"
 	"github.com/so-heee/echo-graphql-example/graph/generated"
 )
 
@@ -27,7 +25,7 @@ var env Env
 
 func main() {
 
-	db, err := gorm.Open("mysql", fmt.Sprintf("%s:%s@%s", env.DBUser, env.DBPass, env.InstanceConnectionName))
+	db, err := database.Connect(env.DBUser, env.DBPass, env.InstanceConnectionName)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -38,9 +36,6 @@ func main() {
 	// Middleware
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
-
-	// Routes
-	// e.GET("/", hello)
 
 	// gqlgen
 	graphqlHandler := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{DB: db}}))
@@ -66,9 +61,4 @@ func init() {
 		log.Fatal("fail to load config wiht env :", err)
 	}
 
-}
-
-// Handler
-func hello(c echo.Context) error {
-	return c.String(http.StatusOK, "Hello, World2!\n")
 }

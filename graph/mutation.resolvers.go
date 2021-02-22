@@ -19,19 +19,7 @@ func (r *mutationResolver) CreateCategoryLarge(ctx context.Context, input model.
 	return &categoryLarge, nil
 }
 
-func (r *queryResolver) Categoryes(ctx context.Context) ([]*model.CategoryLarge, error) {
-	categoryes := []*model.CategoryLarge{}
-
-	r.DB.Table("category_large").Find(&categoryes)
-
-	return categoryes, nil
-}
-
 // Mutation returns generated.MutationResolver implementation.
 func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
 
-// Query returns generated.QueryResolver implementation.
-func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
-
 type mutationResolver struct{ *Resolver }
-type queryResolver struct{ *Resolver }

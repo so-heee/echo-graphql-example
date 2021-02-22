@@ -1,0 +1,20 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+
+type CategoryLarge {
+  categoryLargeId: ID!
+  categoryName: String!
+}
+
+type CategoryMedium {
+  categoryMediumId: ID!
+  categoryName: String!
+  categoryLarge: CategoryLarge!
+}
+
+type CategorySmall {
+  categorySmallId: ID!
+  categoryName: String!
+  CategoryMedium: CategoryMedium!
+}

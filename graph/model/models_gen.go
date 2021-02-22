@@ -7,6 +7,18 @@ type CategoryLarge struct {
 	CategoryName    string `json:"categoryName"`
 }
 
+type CategoryMedium struct {
+	CategoryMediumID string         `json:"categoryMediumId"`
+	CategoryName     string         `json:"categoryName"`
+	CategoryLarge    *CategoryLarge `json:"categoryLarge"`
+}
+
+type CategorySmall struct {
+	CategorySmallID string          `json:"categorySmallId"`
+	CategoryName    string          `json:"categoryName"`
+	CategoryMedium  *CategoryMedium `json:"CategoryMedium"`
+}
+
 type NewCategoryLarge struct {
 	CategoryName string `json:"categoryName"`
 }

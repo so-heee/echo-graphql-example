@@ -2,15 +2,6 @@
 #
 # https://gqlgen.com/getting-started/
 
-type CategoryLarge {
-  categoryLargeId: ID!
-  categoryName: String!
-}
-
-type Query {
-  categoryes: [CategoryLarge!]!
-}
-
 input NewCategoryLarge{
   categoryName: String!
 }
