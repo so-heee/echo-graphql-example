@@ -7,12 +7,12 @@ import (
 )
 
 type User struct {
-	ID   string `gorm:"column:travel_user_id;primary_key"`
+	ID   string `gorm:"column:user_id;primary_key"`
 	Name string `gorm:"column:user_name"`
 }
 
 func (u *User) TableName() string {
-	return "travel_user"
+	return "user"
 }
 
 type UserDao interface {
@@ -39,7 +39,7 @@ func (d *userDao) FindAll(ctx context.Context) ([]*User, error) {
 
 func (d *userDao) FindOne(ctx context.Context, id string) (*User, error) {
 	var users []*User
-	res := d.db.Where("travel_user_id = ?", id).Find(&users)
+	res := d.db.Where("user_id = ?", id).Find(&users)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
