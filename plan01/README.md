@@ -1,9 +1,8 @@
-# echo-graphql-example
-
-Echo + Gorm GraphQL server
+# plan01
 ## Dependency
 
 - Go 1.14
+- gqlgen
 - Echo
 - Gorm
 
