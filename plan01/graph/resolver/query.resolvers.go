@@ -7,9 +7,9 @@ import (
 	"context"
 	"errors"
 
-	"github.com/so-heee/echo-graphql-example/graph/database"
-	"github.com/so-heee/echo-graphql-example/graph/generated"
-	"github.com/so-heee/echo-graphql-example/graph/model"
+	"github.com/so-heee/graphql-example/plan01/graph/database"
+	"github.com/so-heee/graphql-example/plan01/graph/generated"
+	"github.com/so-heee/graphql-example/plan01/graph/model"
 )
 
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {

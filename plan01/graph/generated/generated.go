@@ -12,7 +12,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/so-heee/echo-graphql-example/graph/model"
+	"github.com/so-heee/graphql-example/plan01/graph/model"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -340,7 +340,7 @@ func (ec *executionContext) _Query_users(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.([]*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋechoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐUserᚄ(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan01ᚋgraphᚋmodelᚐUserᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_user(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -382,7 +382,7 @@ func (ec *executionContext) _Query_user(ctx context.Context, field graphql.Colle
 	}
 	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgithubᚗcomᚋsoᚑheeeᚋechoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan01ᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -651,7 +651,7 @@ func (ec *executionContext) _SearchResultItemConnection_type(ctx context.Context
 	}
 	res := resTmp.(model.SearchType)
 	fc.Result = res
-	return ec.marshalNSearchType2githubᚗcomᚋsoᚑheeeᚋechoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐSearchType(ctx, field.Selections, res)
+	return ec.marshalNSearchType2githubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan01ᚋgraphᚋmodelᚐSearchType(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_id(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
@@ -2224,13 +2224,13 @@ func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.Selec
 	return res
 }
 
-func (ec *executionContext) unmarshalNSearchType2githubᚗcomᚋsoᚑheeeᚋechoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐSearchType(ctx context.Context, v interface{}) (model.SearchType, error) {
+func (ec *executionContext) unmarshalNSearchType2githubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan01ᚋgraphᚋmodelᚐSearchType(ctx context.Context, v interface{}) (model.SearchType, error) {
 	var res model.SearchType
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNSearchType2githubᚗcomᚋsoᚑheeeᚋechoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐSearchType(ctx context.Context, sel ast.SelectionSet, v model.SearchType) graphql.Marshaler {
+func (ec *executionContext) marshalNSearchType2githubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan01ᚋgraphᚋmodelᚐSearchType(ctx context.Context, sel ast.SelectionSet, v model.SearchType) graphql.Marshaler {
 	return v
 }
 
@@ -2249,11 +2249,11 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
-func (ec *executionContext) marshalNUser2githubᚗcomᚋsoᚑheeeᚋechoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v model.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2githubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan01ᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v model.User) graphql.Marshaler {
 	return ec._User(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNUser2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋechoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐUserᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan01ᚋgraphᚋmodelᚐUserᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.User) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -2277,7 +2277,7 @@ func (ec *executionContext) marshalNUser2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋecho�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNUser2ᚖgithubᚗcomᚋsoᚑheeeᚋechoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐUser(ctx, sel, v[i])
+			ret[i] = ec.marshalNUser2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan01ᚋgraphᚋmodelᚐUser(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -2290,7 +2290,7 @@ func (ec *executionContext) marshalNUser2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋecho�
 	return ret
 }
 
-func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋsoᚑheeeᚋechoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan01ᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")

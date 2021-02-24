@@ -10,9 +10,9 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/so-heee/echo-graphql-example/graph/database"
-	"github.com/so-heee/echo-graphql-example/graph/generated"
-	"github.com/so-heee/echo-graphql-example/graph/resolver"
+	"github.com/so-heee/graphql-example/plan01/graph/database"
+	"github.com/so-heee/graphql-example/plan01/graph/generated"
+	"github.com/so-heee/graphql-example/plan01/graph/resolver"
 )
 
 type Env struct {
