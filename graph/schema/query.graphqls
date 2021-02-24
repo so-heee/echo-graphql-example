@@ -3,5 +3,6 @@
 # https://gqlgen.com/getting-started/
 
 type Query {
-  categoryes: [CategorySmall!]!
+  users: [User!]!,
+  user(id: ID!): User!
 }

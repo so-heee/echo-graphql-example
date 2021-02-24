@@ -1,20 +1,18 @@
-# GraphQL schema example
-#
-# https://gqlgen.com/getting-started/
-
-type CategoryLarge {
-  categoryLargeId: ID!
-  categoryName: String!
+# enum
+enum SearchType {
+  USER
 }
 
-type CategoryMedium {
-  categoryMediumId: ID!
-  categoryName: String!
-  categoryLarge: CategoryLarge!
+type SearchResultItemConnection {
+  after: String
+  before: String
+  first: Int
+  last: Int
+  query: String!
+  type: SearchType!
 }
 
-type CategorySmall {
-  categorySmallId: ID!
-  categoryName: String!
-  CategoryMedium: CategoryMedium!
+type User {
+  id: ID!
+  name: String!
 }

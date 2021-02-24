@@ -35,7 +35,6 @@ type Config struct {
 }
 
 type ResolverRoot interface {
-	Mutation() MutationResolver
 	Query() QueryResolver
 }
 
@@ -43,37 +42,29 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
-	CategoryLarge struct {
-		CategoryLargeID func(childComplexity int) int
-		CategoryName    func(childComplexity int) int
-	}
-
-	CategoryMedium struct {
-		CategoryLarge    func(childComplexity int) int
-		CategoryMediumID func(childComplexity int) int
-		CategoryName     func(childComplexity int) int
-	}
-
-	CategorySmall struct {
-		CategoryMedium  func(childComplexity int) int
-		CategoryName    func(childComplexity int) int
-		CategorySmallID func(childComplexity int) int
-	}
-
-	Mutation struct {
-		CreateCategoryLarge func(childComplexity int, input model.NewCategoryLarge) int
-	}
-
 	Query struct {
-		Categoryes func(childComplexity int) int
+		User  func(childComplexity int, id string) int
+		Users func(childComplexity int) int
+	}
+
+	SearchResultItemConnection struct {
+		After  func(childComplexity int) int
+		Before func(childComplexity int) int
+		First  func(childComplexity int) int
+		Last   func(childComplexity int) int
+		Query  func(childComplexity int) int
+		Type   func(childComplexity int) int
+	}
+
+	User struct {
+		ID   func(childComplexity int) int
+		Name func(childComplexity int) int
 	}
 }
 
-type MutationResolver interface {
-	CreateCategoryLarge(ctx context.Context, input model.NewCategoryLarge) (*model.CategoryLarge, error)
-}
 type QueryResolver interface {
-	Categoryes(ctx context.Context) ([]*model.CategorySmall, error)
+	Users(ctx context.Context) ([]*model.User, error)
+	User(ctx context.Context, id string) (*model.User, error)
 }
 
 type executableSchema struct {
@@ -91,80 +82,80 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	_ = ec
 	switch typeName + "." + field {
 
-	case "CategoryLarge.categoryLargeId":
-		if e.complexity.CategoryLarge.CategoryLargeID == nil {
+	case "Query.user":
+		if e.complexity.Query.User == nil {
 			break
 		}
 
-		return e.complexity.CategoryLarge.CategoryLargeID(childComplexity), true
-
-	case "CategoryLarge.categoryName":
-		if e.complexity.CategoryLarge.CategoryName == nil {
-			break
-		}
-
-		return e.complexity.CategoryLarge.CategoryName(childComplexity), true
-
-	case "CategoryMedium.categoryLarge":
-		if e.complexity.CategoryMedium.CategoryLarge == nil {
-			break
-		}
-
-		return e.complexity.CategoryMedium.CategoryLarge(childComplexity), true
-
-	case "CategoryMedium.categoryMediumId":
-		if e.complexity.CategoryMedium.CategoryMediumID == nil {
-			break
-		}
-
-		return e.complexity.CategoryMedium.CategoryMediumID(childComplexity), true
-
-	case "CategoryMedium.categoryName":
-		if e.complexity.CategoryMedium.CategoryName == nil {
-			break
-		}
-
-		return e.complexity.CategoryMedium.CategoryName(childComplexity), true
-
-	case "CategorySmall.CategoryMedium":
-		if e.complexity.CategorySmall.CategoryMedium == nil {
-			break
-		}
-
-		return e.complexity.CategorySmall.CategoryMedium(childComplexity), true
-
-	case "CategorySmall.categoryName":
-		if e.complexity.CategorySmall.CategoryName == nil {
-			break
-		}
-
-		return e.complexity.CategorySmall.CategoryName(childComplexity), true
-
-	case "CategorySmall.categorySmallId":
-		if e.complexity.CategorySmall.CategorySmallID == nil {
-			break
-		}
-
-		return e.complexity.CategorySmall.CategorySmallID(childComplexity), true
-
-	case "Mutation.createCategoryLarge":
-		if e.complexity.Mutation.CreateCategoryLarge == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createCategoryLarge_args(context.TODO(), rawArgs)
+		args, err := ec.field_Query_user_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateCategoryLarge(childComplexity, args["input"].(model.NewCategoryLarge)), true
+		return e.complexity.Query.User(childComplexity, args["id"].(string)), true
 
-	case "Query.categoryes":
-		if e.complexity.Query.Categoryes == nil {
+	case "Query.users":
+		if e.complexity.Query.Users == nil {
 			break
 		}
 
-		return e.complexity.Query.Categoryes(childComplexity), true
+		return e.complexity.Query.Users(childComplexity), true
+
+	case "SearchResultItemConnection.after":
+		if e.complexity.SearchResultItemConnection.After == nil {
+			break
+		}
+
+		return e.complexity.SearchResultItemConnection.After(childComplexity), true
+
+	case "SearchResultItemConnection.before":
+		if e.complexity.SearchResultItemConnection.Before == nil {
+			break
+		}
+
+		return e.complexity.SearchResultItemConnection.Before(childComplexity), true
+
+	case "SearchResultItemConnection.first":
+		if e.complexity.SearchResultItemConnection.First == nil {
+			break
+		}
+
+		return e.complexity.SearchResultItemConnection.First(childComplexity), true
+
+	case "SearchResultItemConnection.last":
+		if e.complexity.SearchResultItemConnection.Last == nil {
+			break
+		}
+
+		return e.complexity.SearchResultItemConnection.Last(childComplexity), true
+
+	case "SearchResultItemConnection.query":
+		if e.complexity.SearchResultItemConnection.Query == nil {
+			break
+		}
+
+		return e.complexity.SearchResultItemConnection.Query(childComplexity), true
+
+	case "SearchResultItemConnection.type":
+		if e.complexity.SearchResultItemConnection.Type == nil {
+			break
+		}
+
+		return e.complexity.SearchResultItemConnection.Type(childComplexity), true
+
+	case "User.id":
+		if e.complexity.User.ID == nil {
+			break
+		}
+
+		return e.complexity.User.ID(childComplexity), true
+
+	case "User.name":
+		if e.complexity.User.Name == nil {
+			break
+		}
+
+		return e.complexity.User.Name(childComplexity), true
 
 	}
 	return 0, false
@@ -183,20 +174,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			}
 			first = false
 			data := ec._Query(ctx, rc.Operation.SelectionSet)
-			var buf bytes.Buffer
-			data.MarshalGQL(&buf)
-
-			return &graphql.Response{
-				Data: buf.Bytes(),
-			}
-		}
-	case ast.Mutation:
-		return func(ctx context.Context) *graphql.Response {
-			if !first {
-				return nil
-			}
-			first = false
-			data := ec._Mutation(ctx, rc.Operation.SelectionSet)
 			var buf bytes.Buffer
 			data.MarshalGQL(&buf)
 
@@ -230,43 +207,31 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var sources = []*ast.Source{
-	{Name: "graph/schema/mutation.graphqls", Input: `# GraphQL schema example
-#
-# https://gqlgen.com/getting-started/
-
-input NewCategoryLarge{
-  categoryName: String!
-}
-
-type Mutation {
-  createCategoryLarge(input: NewCategoryLarge!): CategoryLarge!
-}`, BuiltIn: false},
 	{Name: "graph/schema/query.graphqls", Input: `# GraphQL schema example
 #
 # https://gqlgen.com/getting-started/
 
 type Query {
-  categoryes: [CategorySmall!]!
+  users: [User!]!,
+  user(id: ID!): User!
 }`, BuiltIn: false},
-	{Name: "graph/schema/schema.graphqls", Input: `# GraphQL schema example
-#
-# https://gqlgen.com/getting-started/
-
-type CategoryLarge {
-  categoryLargeId: ID!
-  categoryName: String!
+	{Name: "graph/schema/schema.graphqls", Input: `# enum
+enum SearchType {
+  USER
 }
 
-type CategoryMedium {
-  categoryMediumId: ID!
-  categoryName: String!
-  categoryLarge: CategoryLarge!
+type SearchResultItemConnection {
+  after: String
+  before: String
+  first: Int
+  last: Int
+  query: String!
+  type: SearchType!
 }
 
-type CategorySmall {
-  categorySmallId: ID!
-  categoryName: String!
-  CategoryMedium: CategoryMedium!
+type User {
+  id: ID!
+  name: String!
 }`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
@@ -274,21 +239,6 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 // endregion ************************** generated!.gotpl **************************
 
 // region    ***************************** args.gotpl *****************************
-
-func (ec *executionContext) field_Mutation_createCategoryLarge_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 model.NewCategoryLarge
-	if tmp, ok := rawArgs["input"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNNewCategoryLarge2githubᚗcomᚋsoᚑheeeᚋechoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐNewCategoryLarge(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["input"] = arg0
-	return args, nil
-}
 
 func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
@@ -302,6 +252,21 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 		}
 	}
 	args["name"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_user_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
 	return args, nil
 }
 
@@ -343,329 +308,7 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _CategoryLarge_categoryLargeId(ctx context.Context, field graphql.CollectedField, obj *model.CategoryLarge) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "CategoryLarge",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.CategoryLargeID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _CategoryLarge_categoryName(ctx context.Context, field graphql.CollectedField, obj *model.CategoryLarge) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "CategoryLarge",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.CategoryName, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _CategoryMedium_categoryMediumId(ctx context.Context, field graphql.CollectedField, obj *model.CategoryMedium) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "CategoryMedium",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.CategoryMediumID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _CategoryMedium_categoryName(ctx context.Context, field graphql.CollectedField, obj *model.CategoryMedium) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "CategoryMedium",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.CategoryName, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _CategoryMedium_categoryLarge(ctx context.Context, field graphql.CollectedField, obj *model.CategoryMedium) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "CategoryMedium",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.CategoryLarge, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*model.CategoryLarge)
-	fc.Result = res
-	return ec.marshalNCategoryLarge2ᚖgithubᚗcomᚋsoᚑheeeᚋechoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐCategoryLarge(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _CategorySmall_categorySmallId(ctx context.Context, field graphql.CollectedField, obj *model.CategorySmall) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "CategorySmall",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.CategorySmallID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _CategorySmall_categoryName(ctx context.Context, field graphql.CollectedField, obj *model.CategorySmall) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "CategorySmall",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.CategoryName, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _CategorySmall_CategoryMedium(ctx context.Context, field graphql.CollectedField, obj *model.CategorySmall) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "CategorySmall",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.CategoryMedium, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*model.CategoryMedium)
-	fc.Result = res
-	return ec.marshalNCategoryMedium2ᚖgithubᚗcomᚋsoᚑheeeᚋechoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐCategoryMedium(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Mutation_createCategoryLarge(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Mutation_createCategoryLarge_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateCategoryLarge(rctx, args["input"].(model.NewCategoryLarge))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*model.CategoryLarge)
-	fc.Result = res
-	return ec.marshalNCategoryLarge2ᚖgithubᚗcomᚋsoᚑheeeᚋechoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐCategoryLarge(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Query_categoryes(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+func (ec *executionContext) _Query_users(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -683,7 +326,7 @@ func (ec *executionContext) _Query_categoryes(ctx context.Context, field graphql
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Categoryes(rctx)
+		return ec.resolvers.Query().Users(rctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -695,9 +338,51 @@ func (ec *executionContext) _Query_categoryes(ctx context.Context, field graphql
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.CategorySmall)
+	res := resTmp.([]*model.User)
 	fc.Result = res
-	return ec.marshalNCategorySmall2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋechoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐCategorySmallᚄ(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋechoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐUserᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query_user(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_user_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().User(rctx, args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.User)
+	fc.Result = res
+	return ec.marshalNUser2ᚖgithubᚗcomᚋsoᚑheeeᚋechoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -769,6 +454,274 @@ func (ec *executionContext) _Query___schema(ctx context.Context, field graphql.C
 	res := resTmp.(*introspection.Schema)
 	fc.Result = res
 	return ec.marshalO__Schema2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐSchema(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _SearchResultItemConnection_after(ctx context.Context, field graphql.CollectedField, obj *model.SearchResultItemConnection) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "SearchResultItemConnection",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.After, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _SearchResultItemConnection_before(ctx context.Context, field graphql.CollectedField, obj *model.SearchResultItemConnection) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "SearchResultItemConnection",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Before, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _SearchResultItemConnection_first(ctx context.Context, field graphql.CollectedField, obj *model.SearchResultItemConnection) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "SearchResultItemConnection",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.First, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _SearchResultItemConnection_last(ctx context.Context, field graphql.CollectedField, obj *model.SearchResultItemConnection) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "SearchResultItemConnection",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Last, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*int)
+	fc.Result = res
+	return ec.marshalOInt2ᚖint(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _SearchResultItemConnection_query(ctx context.Context, field graphql.CollectedField, obj *model.SearchResultItemConnection) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "SearchResultItemConnection",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Query, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _SearchResultItemConnection_type(ctx context.Context, field graphql.CollectedField, obj *model.SearchResultItemConnection) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "SearchResultItemConnection",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Type, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(model.SearchType)
+	fc.Result = res
+	return ec.marshalNSearchType2githubᚗcomᚋsoᚑheeeᚋechoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐSearchType(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _User_id(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "User",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _User_name(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "User",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Name, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) ___Directive_name(ctx context.Context, field graphql.CollectedField, obj *introspection.Directive) (ret graphql.Marshaler) {
@@ -1858,26 +1811,6 @@ func (ec *executionContext) ___Type_ofType(ctx context.Context, field graphql.Co
 
 // region    **************************** input.gotpl *****************************
 
-func (ec *executionContext) unmarshalInputNewCategoryLarge(ctx context.Context, obj interface{}) (model.NewCategoryLarge, error) {
-	var it model.NewCategoryLarge
-	var asMap = obj.(map[string]interface{})
-
-	for k, v := range asMap {
-		switch k {
-		case "categoryName":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryName"))
-			it.CategoryName, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		}
-	}
-
-	return it, nil
-}
-
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -1885,143 +1818,6 @@ func (ec *executionContext) unmarshalInputNewCategoryLarge(ctx context.Context, 
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
-
-var categoryLargeImplementors = []string{"CategoryLarge"}
-
-func (ec *executionContext) _CategoryLarge(ctx context.Context, sel ast.SelectionSet, obj *model.CategoryLarge) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, categoryLargeImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("CategoryLarge")
-		case "categoryLargeId":
-			out.Values[i] = ec._CategoryLarge_categoryLargeId(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "categoryName":
-			out.Values[i] = ec._CategoryLarge_categoryName(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var categoryMediumImplementors = []string{"CategoryMedium"}
-
-func (ec *executionContext) _CategoryMedium(ctx context.Context, sel ast.SelectionSet, obj *model.CategoryMedium) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, categoryMediumImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("CategoryMedium")
-		case "categoryMediumId":
-			out.Values[i] = ec._CategoryMedium_categoryMediumId(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "categoryName":
-			out.Values[i] = ec._CategoryMedium_categoryName(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "categoryLarge":
-			out.Values[i] = ec._CategoryMedium_categoryLarge(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var categorySmallImplementors = []string{"CategorySmall"}
-
-func (ec *executionContext) _CategorySmall(ctx context.Context, sel ast.SelectionSet, obj *model.CategorySmall) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, categorySmallImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("CategorySmall")
-		case "categorySmallId":
-			out.Values[i] = ec._CategorySmall_categorySmallId(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "categoryName":
-			out.Values[i] = ec._CategorySmall_categoryName(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "CategoryMedium":
-			out.Values[i] = ec._CategorySmall_CategoryMedium(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var mutationImplementors = []string{"Mutation"}
-
-func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, mutationImplementors)
-
-	ctx = graphql.WithFieldContext(ctx, &graphql.FieldContext{
-		Object: "Mutation",
-	})
-
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("Mutation")
-		case "createCategoryLarge":
-			out.Values[i] = ec._Mutation_createCategoryLarge(ctx, field)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
 
 var queryImplementors = []string{"Query"}
 
@@ -2038,7 +1834,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Query")
-		case "categoryes":
+		case "users":
 			field := field
 			out.Concurrently(i, func() (res graphql.Marshaler) {
 				defer func() {
@@ -2046,7 +1842,21 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_categoryes(ctx, field)
+				res = ec._Query_users(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			})
+		case "user":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_user(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&invalids, 1)
 				}
@@ -2056,6 +1866,78 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			out.Values[i] = ec._Query___type(ctx, field)
 		case "__schema":
 			out.Values[i] = ec._Query___schema(ctx, field)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var searchResultItemConnectionImplementors = []string{"SearchResultItemConnection"}
+
+func (ec *executionContext) _SearchResultItemConnection(ctx context.Context, sel ast.SelectionSet, obj *model.SearchResultItemConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, searchResultItemConnectionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SearchResultItemConnection")
+		case "after":
+			out.Values[i] = ec._SearchResultItemConnection_after(ctx, field, obj)
+		case "before":
+			out.Values[i] = ec._SearchResultItemConnection_before(ctx, field, obj)
+		case "first":
+			out.Values[i] = ec._SearchResultItemConnection_first(ctx, field, obj)
+		case "last":
+			out.Values[i] = ec._SearchResultItemConnection_last(ctx, field, obj)
+		case "query":
+			out.Values[i] = ec._SearchResultItemConnection_query(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "type":
+			out.Values[i] = ec._SearchResultItemConnection_type(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var userImplementors = []string{"User"}
+
+func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj *model.User) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, userImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("User")
+		case "id":
+			out.Values[i] = ec._User_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "name":
+			out.Values[i] = ec._User_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -2327,31 +2209,51 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) marshalNCategoryLarge2githubᚗcomᚋsoᚑheeeᚋechoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐCategoryLarge(ctx context.Context, sel ast.SelectionSet, v model.CategoryLarge) graphql.Marshaler {
-	return ec._CategoryLarge(ctx, sel, &v)
+func (ec *executionContext) unmarshalNID2string(ctx context.Context, v interface{}) (string, error) {
+	res, err := graphql.UnmarshalID(v)
+	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNCategoryLarge2ᚖgithubᚗcomᚋsoᚑheeeᚋechoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐCategoryLarge(ctx context.Context, sel ast.SelectionSet, v *model.CategoryLarge) graphql.Marshaler {
-	if v == nil {
+func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
+	res := graphql.MarshalID(v)
+	if res == graphql.Null {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
 		}
-		return graphql.Null
 	}
-	return ec._CategoryLarge(ctx, sel, v)
+	return res
 }
 
-func (ec *executionContext) marshalNCategoryMedium2ᚖgithubᚗcomᚋsoᚑheeeᚋechoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐCategoryMedium(ctx context.Context, sel ast.SelectionSet, v *model.CategoryMedium) graphql.Marshaler {
-	if v == nil {
+func (ec *executionContext) unmarshalNSearchType2githubᚗcomᚋsoᚑheeeᚋechoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐSearchType(ctx context.Context, v interface{}) (model.SearchType, error) {
+	var res model.SearchType
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNSearchType2githubᚗcomᚋsoᚑheeeᚋechoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐSearchType(ctx context.Context, sel ast.SelectionSet, v model.SearchType) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalNString2string(ctx context.Context, v interface{}) (string, error) {
+	res, err := graphql.UnmarshalString(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
+	res := graphql.MarshalString(v)
+	if res == graphql.Null {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
 		}
-		return graphql.Null
 	}
-	return ec._CategoryMedium(ctx, sel, v)
+	return res
 }
 
-func (ec *executionContext) marshalNCategorySmall2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋechoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐCategorySmallᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.CategorySmall) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2githubᚗcomᚋsoᚑheeeᚋechoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v model.User) graphql.Marshaler {
+	return ec._User(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNUser2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋechoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐUserᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.User) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -2375,7 +2277,7 @@ func (ec *executionContext) marshalNCategorySmall2ᚕᚖgithubᚗcomᚋsoᚑheee
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNCategorySmall2ᚖgithubᚗcomᚋsoᚑheeeᚋechoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐCategorySmall(ctx, sel, v[i])
+			ret[i] = ec.marshalNUser2ᚖgithubᚗcomᚋsoᚑheeeᚋechoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐUser(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -2388,49 +2290,14 @@ func (ec *executionContext) marshalNCategorySmall2ᚕᚖgithubᚗcomᚋsoᚑheee
 	return ret
 }
 
-func (ec *executionContext) marshalNCategorySmall2ᚖgithubᚗcomᚋsoᚑheeeᚋechoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐCategorySmall(ctx context.Context, sel ast.SelectionSet, v *model.CategorySmall) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋsoᚑheeeᚋechoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
 		}
 		return graphql.Null
 	}
-	return ec._CategorySmall(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalNID2string(ctx context.Context, v interface{}) (string, error) {
-	res, err := graphql.UnmarshalID(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
-	res := graphql.MarshalID(v)
-	if res == graphql.Null {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-	}
-	return res
-}
-
-func (ec *executionContext) unmarshalNNewCategoryLarge2githubᚗcomᚋsoᚑheeeᚋechoᚑgraphqlᚑexampleᚋgraphᚋmodelᚐNewCategoryLarge(ctx context.Context, v interface{}) (model.NewCategoryLarge, error) {
-	res, err := ec.unmarshalInputNewCategoryLarge(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) unmarshalNString2string(ctx context.Context, v interface{}) (string, error) {
-	res, err := graphql.UnmarshalString(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
-	res := graphql.MarshalString(v)
-	if res == graphql.Null {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-	}
-	return res
+	return ec._User(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {
@@ -2684,6 +2551,21 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 		return graphql.Null
 	}
 	return graphql.MarshalBoolean(*v)
+}
+
+func (ec *executionContext) unmarshalOInt2ᚖint(ctx context.Context, v interface{}) (*int, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalInt(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.SelectionSet, v *int) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return graphql.MarshalInt(*v)
 }
 
 func (ec *executionContext) unmarshalOString2string(ctx context.Context, v interface{}) (string, error) {

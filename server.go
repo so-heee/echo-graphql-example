@@ -10,9 +10,9 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/so-heee/echo-graphql-example/graph"
 	"github.com/so-heee/echo-graphql-example/graph/database"
 	"github.com/so-heee/echo-graphql-example/graph/generated"
+	"github.com/so-heee/echo-graphql-example/graph/resolver"
 )
 
 type Env struct {
@@ -38,7 +38,7 @@ func main() {
 	e.Use(middleware.Recover())
 
 	// gqlgen
-	graphqlHandler := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{DB: db}}))
+	graphqlHandler := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &resolver.Resolver{DB: db}}))
 	playgroundHandler := playground.Handler("GraphQL", "/query")
 
 	e.POST("/query", func(c echo.Context) error {
