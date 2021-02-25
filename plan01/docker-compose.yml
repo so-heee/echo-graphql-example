@@ -5,6 +5,6 @@ services:
     ports:
       - 1323:1323
     volumes:
-      - .:/go/src/github.com/so-heee/echo-graphql-example
+      - .:/go/src/github.com/so-heee/graphql-example/plan01
     tty: true
     command: realize start
