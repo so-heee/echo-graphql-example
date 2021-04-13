@@ -1,29 +1,29 @@
 package main
 
 import (
-	"log"
-	"net/http"
-	"os"
-
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/so-heee/graphql-example/plan02/graph"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/so-heee/graphql-example/plan02/graph/generated"
+	"github.com/so-heee/graphql-example/plan02/graph/resolver"
 )
 
-const defaultPort = "8080"
-
 func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = defaultPort
-	}
+	// Echo instance
+	e := echo.New()
 
-	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
+	// Middleware
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
 
-	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	http.Handle("/query", srv)
+	graphqlHandler := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &resolver.Resolver{}}))
+	playgroundHandler := playground.Handler("GraphQL Playground", "/query")
 
-	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	e.POST("/query", echo.WrapHandler(graphqlHandler))
+
+	e.GET("/playground", echo.WrapHandler(playgroundHandler))
+
+	// Start server
+	e.Logger.Fatal(e.Start(":1323"))
 }
