@@ -7,6 +7,5 @@ WORKDIR $SRC_DIR
 
 RUN apk update && apk add git
 
-RUN go mod init graphql-example/plan01
-RUN go get github.com/labstack/echo/v4
+RUN go mod init graphql-example/plan02
 RUN GO111MODULE=off go get github.com/oxequa/realize
