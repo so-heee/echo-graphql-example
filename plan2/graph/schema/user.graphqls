@@ -1,0 +1,25 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+
+type User implements Node {
+  id: ID!
+  name: String
+  email: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type UserEdge implements Edge {
+  cursor: Cursor!
+  node: User!
+}
+
+type UserConnection implements Connection {
+  edges: [UserEdge]
+  nodes: [User]
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+scalar DateTime

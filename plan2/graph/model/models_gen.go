@@ -6,6 +6,25 @@ import (
 	"time"
 )
 
+type Connection interface {
+	IsConnection()
+}
+
+type Edge interface {
+	IsEdge()
+}
+
+type Node interface {
+	IsNode()
+}
+
+type PageInfo struct {
+	StartCursor     *string `json:"startCursor"`
+	EndCursor       *string `json:"endCursor"`
+	HasPreviousPage bool    `json:"hasPreviousPage"`
+	HasNextPage     bool    `json:"hasNextPage"`
+}
+
 type User struct {
 	ID        string     `json:"id"`
 	Name      *string    `json:"name"`
@@ -13,3 +32,21 @@ type User struct {
 	CreatedAt *time.Time `json:"createdAt"`
 	UpdatedAt *time.Time `json:"updatedAt"`
 }
+
+func (User) IsNode() {}
+
+type UserConnection struct {
+	Edges      []*UserEdge `json:"edges"`
+	Nodes      []*User     `json:"nodes"`
+	PageInfo   *PageInfo   `json:"pageInfo"`
+	TotalCount int         `json:"totalCount"`
+}
+
+func (UserConnection) IsConnection() {}
+
+type UserEdge struct {
+	Cursor string `json:"cursor"`
+	Node   *User  `json:"node"`
+}
+
+func (UserEdge) IsEdge() {}

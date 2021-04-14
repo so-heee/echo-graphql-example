@@ -1,4 +1,5 @@
 type Query {
-  users: [User!]!
-  user(id: ID!): User!
+  users(after: Cursor, before: Cursor, first: Int, last: Int): UserConnection!
 }
+
+scalar Cursor
