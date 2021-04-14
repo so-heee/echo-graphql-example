@@ -1,0 +1,26 @@
+package infrastructure
+
+import (
+	"github.com/go-chi/chi"
+)
+
+// Server represents main server structure
+type Server struct {
+	router *chi.Mux
+	config Config
+}
+
+type Config struct {
+	Logging bool
+}
+
+// NewServer returns server with initialized router
+func NewServer(c Config) *Server {
+	return &Server{
+		router: chi.NewRouter(),
+		config: c,
+	}
+}
+
+func init() {
+}

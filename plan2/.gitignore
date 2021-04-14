@@ -1,0 +1,17 @@
+# mysql
+docker/mysql/data/
+
+# IDE / Editor
+.idea
+
+# Service worker
+sw.*
+
+# Mac OSX
+.DS_Store
+
+# Vim swap files
+*.swp
+
+go.sum
+main
