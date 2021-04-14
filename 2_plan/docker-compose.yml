@@ -6,7 +6,7 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - .:/go/src/github.com/so-heee/graphql-example/plan02
+      - .:/go/src/github.com/so-heee/graphql-example/2_plan
     tty: true
     command: realize start
   db:

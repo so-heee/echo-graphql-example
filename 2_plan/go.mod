@@ -1,4 +1,4 @@
-module github.com/so-heee/graphql-example/plan02
+module github.com/so-heee/graphql-example/2_plan
 
 go 1.16
 
@@ -15,7 +15,6 @@ require (
 	github.com/vektah/gqlparser/v2 v2.1.0
 	github.com/volatiletech/null/v8 v8.1.2
 	github.com/volatiletech/randomize v0.0.1
-	github.com/volatiletech/sqlboiler v3.7.1+incompatible
 	github.com/volatiletech/sqlboiler/v4 v4.5.0
 	github.com/volatiletech/strmangle v0.0.1
 	golang.org/x/net v0.0.0-20200822124328-c89045814202 // indirect
