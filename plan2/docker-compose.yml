@@ -8,6 +8,7 @@ services:
     volumes:
       - .:/go/src/github.com/so-heee/graphql-example/plan2
     tty: true
+    env_file: ./config/.env
     command: realize start
   db:
     image: mysql:5.7

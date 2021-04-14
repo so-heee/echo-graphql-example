@@ -9,6 +9,7 @@ require (
 	github.com/go-chi/render v1.0.1
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/kat-co/vala v0.0.0-20170210184112-42e1d8b61f12
+	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/mitchellh/mapstructure v1.4.1 // indirect
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/viper v1.7.1
