@@ -373,26 +373,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var sources = []*ast.Source{
-	{Name: "graph/schema/query.graphqls", Input: `type Query {
-  todos(
-    after: String
-    before: String
-    first: Int
-    last: Int
-    orderBy: [TodoOrder!] = [{ field: CREATED_AT, direction: ASC }]
-  ): TodoConnection!
-  users(
-    after: String
-    before: String
-    first: Int
-    last: Int
-    orderBy: [UserOrder!] = [{ field: CREATED_AT, direction: ASC }]
-  ): UserConnection!
-}
-
-scalar DateTime
-`, BuiltIn: false},
-	{Name: "graph/schema/schema.graphqls", Input: `type PageInfo {
+	{Name: "graph/schema/page.graphqls", Input: `type PageInfo {
   startCursor: String
   endCursor: String
   hasPreviousPage: Boolean!
@@ -420,6 +401,25 @@ enum OrderDirection {
   DESC
 }
 `, BuiltIn: false},
+	{Name: "graph/schema/query.graphqls", Input: `type Query {
+  todos(
+    after: String
+    before: String
+    first: Int
+    last: Int
+    orderBy: [TodoOrder!] = [{ field: CREATED_AT, direction: ASC }]
+  ): TodoConnection!
+  users(
+    after: String
+    before: String
+    first: Int
+    last: Int
+    orderBy: [UserOrder!] = [{ field: CREATED_AT, direction: ASC }]
+  ): UserConnection!
+}
+`, BuiltIn: false},
+	{Name: "graph/schema/scalar.graphqls", Input: `scalar DateTime
+`, BuiltIn: false},
 	{Name: "graph/schema/todo.graphqls", Input: `type Todo implements Node {
   id: ID!
   userId: ID!
@@ -440,15 +440,15 @@ type TodoConnection implements Connection {
   totalCount: Int!
 }
 
-input TodoOrder {
-  field: TodoOrderField
-  direction: OrderDirection
-}
-
 enum TodoOrderField {
   ID
   CREATED_AT
   UPDATED_AT
+}
+
+input TodoOrder {
+  field: TodoOrderField
+  direction: OrderDirection
 }
 `, BuiltIn: false},
 	{Name: "graph/schema/user.graphqls", Input: `type User implements Node {
@@ -471,15 +471,15 @@ type UserConnection implements Connection {
   totalCount: Int!
 }
 
-input UserOrder {
-  field: UserOrderField
-  direction: OrderDirection
-}
-
 enum UserOrderField {
   ID
   CREATED_AT
   UPDATED_AT
+}
+
+input UserOrder {
+  field: UserOrderField
+  direction: OrderDirection
 }
 `, BuiltIn: false},
 }

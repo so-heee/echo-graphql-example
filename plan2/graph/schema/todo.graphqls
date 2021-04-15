@@ -18,13 +18,13 @@ type TodoConnection implements Connection {
   totalCount: Int!
 }
 
-input TodoOrder {
-  field: TodoOrderField
-  direction: OrderDirection
-}
-
 enum TodoOrderField {
   ID
   CREATED_AT
   UPDATED_AT
+}
+
+input TodoOrder {
+  field: TodoOrderField
+  direction: OrderDirection
 }

@@ -14,5 +14,3 @@ type Query {
     orderBy: [UserOrder!] = [{ field: CREATED_AT, direction: ASC }]
   ): UserConnection!
 }
-
-scalar DateTime

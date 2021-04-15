@@ -18,13 +18,13 @@ type UserConnection implements Connection {
   totalCount: Int!
 }
 
-input UserOrder {
-  field: UserOrderField
-  direction: OrderDirection
-}
-
 enum UserOrderField {
   ID
   CREATED_AT
   UPDATED_AT
+}
+
+input UserOrder {
+  field: UserOrderField
+  direction: OrderDirection
 }
