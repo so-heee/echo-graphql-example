@@ -1,7 +1,3 @@
-# GraphQL schema example
-#
-# https://gqlgen.com/getting-started/
-
 type User implements Node {
   id: ID!
   name: String
@@ -11,7 +7,7 @@ type User implements Node {
 }
 
 type UserEdge implements Edge {
-  cursor: Cursor!
+  cursor: String!
   node: User!
 }
 
@@ -22,4 +18,13 @@ type UserConnection implements Connection {
   totalCount: Int!
 }
 
-scalar DateTime
+input UserOrder {
+  field: UserOrderField
+  direction: OrderDirection
+}
+
+enum UserOrderField {
+  ID
+  CREATED_AT
+  UPDATED_AT
+}

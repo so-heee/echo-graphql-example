@@ -1,10 +1,6 @@
-# GraphQL schema example
-#
-# https://gqlgen.com/getting-started/
-
 type PageInfo {
-  startCursor: Cursor
-  endCursor: Cursor
+  startCursor: String
+  endCursor: String
   hasPreviousPage: Boolean!
   hasNextPage: Boolean!
 }
@@ -17,10 +13,15 @@ interface Connection {
 }
 
 interface Edge {
-  cursor: Cursor!
+  cursor: String!
   node: Node!
 }
 
 interface Node {
   id: ID!
+}
+
+enum OrderDirection {
+  ASC
+  DESC
 }

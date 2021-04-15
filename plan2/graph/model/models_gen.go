@@ -3,6 +3,9 @@
 package model
 
 import (
+	"fmt"
+	"io"
+	"strconv"
 	"time"
 )
 
@@ -23,6 +26,37 @@ type PageInfo struct {
 	EndCursor       *string `json:"endCursor"`
 	HasPreviousPage bool    `json:"hasPreviousPage"`
 	HasNextPage     bool    `json:"hasNextPage"`
+}
+
+type Todo struct {
+	ID        string     `json:"id"`
+	UserID    string     `json:"userId"`
+	Text      *string    `json:"text"`
+	CreatedAt *time.Time `json:"createdAt"`
+	UpdatedAt *time.Time `json:"updatedAt"`
+}
+
+func (Todo) IsNode() {}
+
+type TodoConnection struct {
+	Edges      []*TodoEdge `json:"edges"`
+	Nodes      []*Todo     `json:"nodes"`
+	PageInfo   *PageInfo   `json:"pageInfo"`
+	TotalCount int         `json:"totalCount"`
+}
+
+func (TodoConnection) IsConnection() {}
+
+type TodoEdge struct {
+	Cursor string `json:"cursor"`
+	Node   *Todo  `json:"node"`
+}
+
+func (TodoEdge) IsEdge() {}
+
+type TodoOrder struct {
+	Field     *TodoOrderField `json:"field"`
+	Direction *OrderDirection `json:"direction"`
 }
 
 type User struct {
@@ -50,3 +84,135 @@ type UserEdge struct {
 }
 
 func (UserEdge) IsEdge() {}
+
+type UserOrder struct {
+	Field     *UserOrderField `json:"field"`
+	Direction *OrderDirection `json:"direction"`
+}
+
+type OrderDirection string
+
+const (
+	OrderDirectionAsc  OrderDirection = "ASC"
+	OrderDirectionDesc OrderDirection = "DESC"
+)
+
+var AllOrderDirection = []OrderDirection{
+	OrderDirectionAsc,
+	OrderDirectionDesc,
+}
+
+func (e OrderDirection) IsValid() bool {
+	switch e {
+	case OrderDirectionAsc, OrderDirectionDesc:
+		return true
+	}
+	return false
+}
+
+func (e OrderDirection) String() string {
+	return string(e)
+}
+
+func (e *OrderDirection) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = OrderDirection(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid OrderDirection", str)
+	}
+	return nil
+}
+
+func (e OrderDirection) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type TodoOrderField string
+
+const (
+	TodoOrderFieldID        TodoOrderField = "ID"
+	TodoOrderFieldCreatedAt TodoOrderField = "CREATED_AT"
+	TodoOrderFieldUpdatedAt TodoOrderField = "UPDATED_AT"
+)
+
+var AllTodoOrderField = []TodoOrderField{
+	TodoOrderFieldID,
+	TodoOrderFieldCreatedAt,
+	TodoOrderFieldUpdatedAt,
+}
+
+func (e TodoOrderField) IsValid() bool {
+	switch e {
+	case TodoOrderFieldID, TodoOrderFieldCreatedAt, TodoOrderFieldUpdatedAt:
+		return true
+	}
+	return false
+}
+
+func (e TodoOrderField) String() string {
+	return string(e)
+}
+
+func (e *TodoOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = TodoOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid TodoOrderField", str)
+	}
+	return nil
+}
+
+func (e TodoOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type UserOrderField string
+
+const (
+	UserOrderFieldID        UserOrderField = "ID"
+	UserOrderFieldCreatedAt UserOrderField = "CREATED_AT"
+	UserOrderFieldUpdatedAt UserOrderField = "UPDATED_AT"
+)
+
+var AllUserOrderField = []UserOrderField{
+	UserOrderFieldID,
+	UserOrderFieldCreatedAt,
+	UserOrderFieldUpdatedAt,
+}
+
+func (e UserOrderField) IsValid() bool {
+	switch e {
+	case UserOrderFieldID, UserOrderFieldCreatedAt, UserOrderFieldUpdatedAt:
+		return true
+	}
+	return false
+}
+
+func (e UserOrderField) String() string {
+	return string(e)
+}
+
+func (e *UserOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = UserOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid UserOrderField", str)
+	}
+	return nil
+}
+
+func (e UserOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}

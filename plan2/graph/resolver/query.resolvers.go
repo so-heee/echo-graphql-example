@@ -5,7 +5,6 @@ package resolver
 
 import (
 	"context"
-	"fmt"
 	"strconv"
 
 	"github.com/so-heee/graphql-example/plan2/graph/generated"
@@ -13,16 +12,87 @@ import (
 	"github.com/so-heee/graphql-example/plan2/pagination"
 )
 
-func (r *queryResolver) Users(ctx context.Context, after *string, before *string, first *int, last *int) (*model.UserConnection, error) {
-
+func (r *queryResolver) Todos(ctx context.Context, after *string, before *string, first *int, last *int, orderBy []*model.TodoOrder) (*model.TodoConnection, error) {
 	paginator := pagination.NewPaginator(
 		after,
 		before,
 		first,
 		last,
+		model.TodoOrderToPaginationOrders(orderBy),
 	)
 
-	users, err := r.repo.Users(ctx)
+	todos, err := r.repo.Todos(ctx, paginator)
+	if err != nil {
+		return nil, err
+	}
+
+	conn := &model.TodoConnection{}
+
+	if len(todos) == 0 {
+		return conn, nil
+	}
+
+	limit := len(todos)
+	if limit > paginator.Limit() {
+		limit = paginator.Limit()
+	}
+
+	conn.Edges = make([]*model.TodoEdge, limit)
+	conn.Nodes = make([]*model.Todo, limit)
+
+	for i, t := range todos[:limit] {
+		cursor, _ := paginator.CreateEncodedCursor(t)
+
+		node := &model.Todo{
+			ID:        strconv.Itoa(t.ID),
+			Text:      &t.Text.String,
+			CreatedAt: &t.CreatedAt,
+			UpdatedAt: &t.UpdatedAt,
+		}
+
+		pos := i
+		if !paginator.IsAfter() {
+			pos = len(conn.Edges) - i - 1
+		}
+
+		conn.Edges[pos] = &model.TodoEdge{Cursor: cursor, Node: node}
+		conn.Nodes[pos] = node
+	}
+
+	conn.PageInfo = &model.PageInfo{
+		StartCursor: &conn.Edges[0].Cursor,
+		EndCursor:   &conn.Edges[len(conn.Edges)-1].Cursor,
+	}
+
+	if len(todos) > limit {
+		if paginator.IsAfter() {
+			conn.PageInfo.HasNextPage = true
+		} else {
+			conn.PageInfo.HasPreviousPage = true
+		}
+	}
+
+	totalCount, err := r.repo.UsersCount(ctx)
+
+	if err != nil {
+		return conn, err
+	}
+
+	conn.TotalCount = int(totalCount)
+
+	return conn, nil
+}
+
+func (r *queryResolver) Users(ctx context.Context, after *string, before *string, first *int, last *int, orderBy []*model.UserOrder) (*model.UserConnection, error) {
+	paginator := pagination.NewPaginator(
+		after,
+		before,
+		first,
+		last,
+		model.UserOrderToPaginationOrders(orderBy),
+	)
+
+	users, err := r.repo.Users(ctx, paginator)
 	if err != nil {
 		return nil, err
 	}
@@ -89,13 +159,3 @@ func (r *queryResolver) Users(ctx context.Context, after *string, before *string
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
 type queryResolver struct{ *Resolver }
-
-// !!! WARNING !!!
-// The code below was going to be deleted when updating resolvers. It has been copied here so you have
-// one last chance to move it out of harms way if you want. There are two reasons this happens:
-//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
-//    it when you're done.
-//  - You have helper methods in this file. Move them out to keep these resolver files clean.
-func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {
-	panic(fmt.Errorf("not implemented"))
-}

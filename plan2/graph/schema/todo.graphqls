@@ -1,0 +1,30 @@
+type Todo implements Node {
+  id: ID!
+  userId: ID!
+  text: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type TodoEdge implements Edge {
+  cursor: String!
+  node: Todo!
+}
+
+type TodoConnection implements Connection {
+  edges: [TodoEdge]
+  nodes: [Todo]
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+input TodoOrder {
+  field: TodoOrderField
+  direction: OrderDirection
+}
+
+enum TodoOrderField {
+  ID
+  CREATED_AT
+  UPDATED_AT
+}

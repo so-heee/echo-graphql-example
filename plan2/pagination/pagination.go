@@ -31,12 +31,13 @@ type Order struct {
 	Direction Direction
 }
 
-func NewPaginator(after *string, before *string, first *int, last *int) *Paginator {
+func NewPaginator(after *string, before *string, first *int, last *int, orders []*Order) *Paginator {
 	return &Paginator{
 		After:  after,
 		Before: before,
 		First:  first,
 		Last:   last,
+		Orders: orders,
 	}
 }
 

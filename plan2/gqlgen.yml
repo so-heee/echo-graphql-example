@@ -57,6 +57,3 @@ models:
   DateTime:
     model:
       - github.com/99designs/gqlgen/graphql.Time
-  Cursor:
-    model:
-      - github.com/99designs/gqlgen/graphql.ID
