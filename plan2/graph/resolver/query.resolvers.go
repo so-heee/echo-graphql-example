@@ -9,8 +9,22 @@ import (
 
 	"github.com/so-heee/graphql-example/plan2/graph/generated"
 	"github.com/so-heee/graphql-example/plan2/graph/model"
-	"github.com/so-heee/graphql-example/plan2/pagination"
+	"github.com/so-heee/graphql-example/plan2/graph/pagination"
 )
+
+func (r *queryResolver) Todo(ctx context.Context, id *string) (*model.Todo, error) {
+	todo, err := r.repo.TodoByID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	node := &model.Todo{
+		ID:        strconv.Itoa(todo.ID),
+		Text:      &todo.Text.String,
+		CreatedAt: &todo.CreatedAt,
+		UpdatedAt: &todo.UpdatedAt,
+	}
+	return node, nil
+}
 
 func (r *queryResolver) Todos(ctx context.Context, after *string, before *string, first *int, last *int, orderBy []*model.TodoOrder) (*model.TodoConnection, error) {
 	paginator := pagination.NewPaginator(

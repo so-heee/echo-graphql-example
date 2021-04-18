@@ -3,7 +3,7 @@
 package model
 
 import (
-	"github.com/so-heee/graphql-example/plan2/pagination"
+	"github.com/so-heee/graphql-example/plan2/graph/pagination"
 	"strings"
 )
 

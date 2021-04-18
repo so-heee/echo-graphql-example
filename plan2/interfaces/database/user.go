@@ -3,8 +3,8 @@ package database
 import (
 	"context"
 
+	"github.com/so-heee/graphql-example/plan2/graph/pagination"
 	"github.com/so-heee/graphql-example/plan2/models"
-	"github.com/so-heee/graphql-example/plan2/pagination"
 )
 
 func (r *Repository) Users(ctx context.Context, paginator *pagination.Paginator) ([]*models.User, error) {

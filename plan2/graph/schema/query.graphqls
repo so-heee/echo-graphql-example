@@ -1,4 +1,5 @@
 type Query {
+  todo(id: ID): Todo
   todos(
     after: String
     before: String

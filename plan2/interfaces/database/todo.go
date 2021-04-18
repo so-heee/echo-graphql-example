@@ -3,9 +3,13 @@ package database
 import (
 	"context"
 
+	"github.com/so-heee/graphql-example/plan2/graph/pagination"
 	"github.com/so-heee/graphql-example/plan2/models"
-	"github.com/so-heee/graphql-example/plan2/pagination"
 )
+
+func (r *Repository) TodoByID(ctx context.Context, id int) (*models.Todo, error) {
+	return models.FindTodo(ctx, r.db, id)
+}
 
 func (r *Repository) Todos(ctx context.Context, paginator *pagination.Paginator) ([]*models.Todo, error) {
 	if paginator != nil {

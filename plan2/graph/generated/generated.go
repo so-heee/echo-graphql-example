@@ -52,6 +52,7 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
+		Todo  func(childComplexity int, id *string) int
 		Todos func(childComplexity int, after *string, before *string, first *int, last *int, orderBy []*model.TodoOrder) int
 		Users func(childComplexity int, after *string, before *string, first *int, last *int, orderBy []*model.UserOrder) int
 	}
@@ -98,6 +99,7 @@ type ComplexityRoot struct {
 }
 
 type QueryResolver interface {
+	Todo(ctx context.Context, id *string) (*model.Todo, error)
 	Todos(ctx context.Context, after *string, before *string, first *int, last *int, orderBy []*model.TodoOrder) (*model.TodoConnection, error)
 	Users(ctx context.Context, after *string, before *string, first *int, last *int, orderBy []*model.UserOrder) (*model.UserConnection, error)
 }
@@ -144,6 +146,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.PageInfo.StartCursor(childComplexity), true
+
+	case "Query.todo":
+		if e.complexity.Query.Todo == nil {
+			break
+		}
+
+		args, err := ec.field_Query_todo_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Todo(childComplexity, args["id"].(*string)), true
 
 	case "Query.todos":
 		if e.complexity.Query.Todos == nil {
@@ -402,6 +416,7 @@ enum OrderDirection {
 }
 `, BuiltIn: false},
 	{Name: "graph/schema/query.graphqls", Input: `type Query {
+  todo(id: ID): Todo
   todos(
     after: String
     before: String
@@ -501,6 +516,21 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 		}
 	}
 	args["name"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_todo_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
 	return args, nil
 }
 
@@ -776,6 +806,45 @@ func (ec *executionContext) _PageInfo_hasNextPage(ctx context.Context, field gra
 	res := resTmp.(bool)
 	fc.Result = res
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query_todo(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_todo_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Todo(rctx, args["id"].(*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Todo)
+	fc.Result = res
+	return ec.marshalOTodo2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐTodo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_todos(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -2941,6 +3010,17 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Query")
+		case "todo":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_todo(ctx, field)
+				return res
+			})
 		case "todos":
 			field := field
 			out.Concurrently(i, func() (res graphql.Marshaler) {
@@ -3832,6 +3912,21 @@ func (ec *executionContext) marshalODateTime2ᚖtimeᚐTime(ctx context.Context,
 		return graphql.Null
 	}
 	return graphql.MarshalTime(*v)
+}
+
+func (ec *executionContext) unmarshalOID2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalID(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOID2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return graphql.MarshalID(*v)
 }
 
 func (ec *executionContext) unmarshalOInt2ᚖint(ctx context.Context, v interface{}) (*int, error) {
