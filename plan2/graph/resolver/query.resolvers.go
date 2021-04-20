@@ -12,7 +12,7 @@ import (
 	"github.com/so-heee/graphql-example/plan2/graph/pagination"
 )
 
-func (r *queryResolver) Todo(ctx context.Context, id *string) (*model.Todo, error) {
+func (r *queryResolver) Todo(ctx context.Context, id *int) (*model.Todo, error) {
 	todo, err := r.repo.TodoByID(ctx, id)
 	if err != nil {
 		return nil, err

@@ -7,8 +7,8 @@ import (
 	"github.com/so-heee/graphql-example/plan2/models"
 )
 
-func (r *Repository) TodoByID(ctx context.Context, id int) (*models.Todo, error) {
-	return models.FindTodo(ctx, r.db, id)
+func (r *Repository) TodoByID(ctx context.Context, id *int) (*models.Todo, error) {
+	return models.FindTodo(ctx, r.db, *id)
 }
 
 func (r *Repository) Todos(ctx context.Context, paginator *pagination.Paginator) ([]*models.Todo, error) {

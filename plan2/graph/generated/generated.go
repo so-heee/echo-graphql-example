@@ -52,7 +52,7 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		Todo  func(childComplexity int, id *string) int
+		Todo  func(childComplexity int, id *int) int
 		Todos func(childComplexity int, after *string, before *string, first *int, last *int, orderBy []*model.TodoOrder) int
 		Users func(childComplexity int, after *string, before *string, first *int, last *int, orderBy []*model.UserOrder) int
 	}
@@ -99,7 +99,7 @@ type ComplexityRoot struct {
 }
 
 type QueryResolver interface {
-	Todo(ctx context.Context, id *string) (*model.Todo, error)
+	Todo(ctx context.Context, id *int) (*model.Todo, error)
 	Todos(ctx context.Context, after *string, before *string, first *int, last *int, orderBy []*model.TodoOrder) (*model.TodoConnection, error)
 	Users(ctx context.Context, after *string, before *string, first *int, last *int, orderBy []*model.UserOrder) (*model.UserConnection, error)
 }
@@ -157,7 +157,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Todo(childComplexity, args["id"].(*string)), true
+		return e.complexity.Query.Todo(childComplexity, args["id"].(*int)), true
 
 	case "Query.todos":
 		if e.complexity.Query.Todos == nil {
@@ -416,7 +416,7 @@ enum OrderDirection {
 }
 `, BuiltIn: false},
 	{Name: "graph/schema/query.graphqls", Input: `type Query {
-  todo(id: ID): Todo
+  todo(id: Int): Todo
   todos(
     after: String
     before: String
@@ -522,10 +522,10 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 func (ec *executionContext) field_Query_todo_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 *string
+	var arg0 *int
 	if tmp, ok := rawArgs["id"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-		arg0, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
+		arg0, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -833,7 +833,7 @@ func (ec *executionContext) _Query_todo(ctx context.Context, field graphql.Colle
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Todo(rctx, args["id"].(*string))
+		return ec.resolvers.Query().Todo(rctx, args["id"].(*int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3912,21 +3912,6 @@ func (ec *executionContext) marshalODateTime2ᚖtimeᚐTime(ctx context.Context,
 		return graphql.Null
 	}
 	return graphql.MarshalTime(*v)
-}
-
-func (ec *executionContext) unmarshalOID2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := graphql.UnmarshalID(v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOID2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return graphql.MarshalID(*v)
 }
 
 func (ec *executionContext) unmarshalOInt2ᚖint(ctx context.Context, v interface{}) (*int, error) {

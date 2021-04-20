@@ -1,5 +1,5 @@
 type Query {
-  todo(id: ID): Todo
+  todo(id: Int): Todo
   todos(
     after: String
     before: String
