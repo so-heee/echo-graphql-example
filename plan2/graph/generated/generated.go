@@ -14,7 +14,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/so-heee/graphql-example/plan2/graph/model"
+	"github.com/so-heee/graphql-example/plan2/domain/model"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -387,7 +387,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var sources = []*ast.Source{
-	{Name: "graph/schema/page.graphqls", Input: `type PageInfo {
+	{Name: "schema/page.graphqls", Input: `type PageInfo {
   startCursor: String
   endCursor: String
   hasPreviousPage: Boolean!
@@ -415,7 +415,7 @@ enum OrderDirection {
   DESC
 }
 `, BuiltIn: false},
-	{Name: "graph/schema/query.graphqls", Input: `type Query {
+	{Name: "schema/query.graphqls", Input: `type Query {
   todo(id: Int): Todo
   todos(
     after: String
@@ -433,9 +433,9 @@ enum OrderDirection {
   ): UserConnection!
 }
 `, BuiltIn: false},
-	{Name: "graph/schema/scalar.graphqls", Input: `scalar DateTime
+	{Name: "schema/scalar.graphqls", Input: `scalar DateTime
 `, BuiltIn: false},
-	{Name: "graph/schema/todo.graphqls", Input: `type Todo implements Node {
+	{Name: "schema/todo.graphqls", Input: `type Todo implements Node {
   id: ID!
   userId: ID!
   text: String
@@ -466,7 +466,7 @@ input TodoOrder {
   direction: OrderDirection
 }
 `, BuiltIn: false},
-	{Name: "graph/schema/user.graphqls", Input: `type User implements Node {
+	{Name: "schema/user.graphqls", Input: `type User implements Node {
   id: ID!
   name: String
   email: String
@@ -576,7 +576,7 @@ func (ec *executionContext) field_Query_todos_args(ctx context.Context, rawArgs 
 	var arg4 []*model.TodoOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOTodoOrder2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐTodoOrderᚄ(ctx, tmp)
+		arg4, err = ec.unmarshalOTodoOrder2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐTodoOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -627,7 +627,7 @@ func (ec *executionContext) field_Query_users_args(ctx context.Context, rawArgs 
 	var arg4 []*model.UserOrder
 	if tmp, ok := rawArgs["orderBy"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
-		arg4, err = ec.unmarshalOUserOrder2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐUserOrderᚄ(ctx, tmp)
+		arg4, err = ec.unmarshalOUserOrder2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐUserOrderᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -844,7 +844,7 @@ func (ec *executionContext) _Query_todo(ctx context.Context, field graphql.Colle
 	}
 	res := resTmp.(*model.Todo)
 	fc.Result = res
-	return ec.marshalOTodo2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐTodo(ctx, field.Selections, res)
+	return ec.marshalOTodo2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐTodo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_todos(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -886,7 +886,7 @@ func (ec *executionContext) _Query_todos(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.(*model.TodoConnection)
 	fc.Result = res
-	return ec.marshalNTodoConnection2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐTodoConnection(ctx, field.Selections, res)
+	return ec.marshalNTodoConnection2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐTodoConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_users(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -928,7 +928,7 @@ func (ec *executionContext) _Query_users(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.(*model.UserConnection)
 	fc.Result = res
-	return ec.marshalNUserConnection2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐUserConnection(ctx, field.Selections, res)
+	return ec.marshalNUserConnection2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐUserConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -1197,7 +1197,7 @@ func (ec *executionContext) _TodoConnection_edges(ctx context.Context, field gra
 	}
 	res := resTmp.([]*model.TodoEdge)
 	fc.Result = res
-	return ec.marshalOTodoEdge2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐTodoEdge(ctx, field.Selections, res)
+	return ec.marshalOTodoEdge2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐTodoEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _TodoConnection_nodes(ctx context.Context, field graphql.CollectedField, obj *model.TodoConnection) (ret graphql.Marshaler) {
@@ -1229,7 +1229,7 @@ func (ec *executionContext) _TodoConnection_nodes(ctx context.Context, field gra
 	}
 	res := resTmp.([]*model.Todo)
 	fc.Result = res
-	return ec.marshalOTodo2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐTodo(ctx, field.Selections, res)
+	return ec.marshalOTodo2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐTodo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _TodoConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *model.TodoConnection) (ret graphql.Marshaler) {
@@ -1264,7 +1264,7 @@ func (ec *executionContext) _TodoConnection_pageInfo(ctx context.Context, field 
 	}
 	res := resTmp.(*model.PageInfo)
 	fc.Result = res
-	return ec.marshalNPageInfo2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐPageInfo(ctx, field.Selections, res)
+	return ec.marshalNPageInfo2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐPageInfo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _TodoConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *model.TodoConnection) (ret graphql.Marshaler) {
@@ -1369,7 +1369,7 @@ func (ec *executionContext) _TodoEdge_node(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.(*model.Todo)
 	fc.Result = res
-	return ec.marshalNTodo2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐTodo(ctx, field.Selections, res)
+	return ec.marshalNTodo2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐTodo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_id(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
@@ -1564,7 +1564,7 @@ func (ec *executionContext) _UserConnection_edges(ctx context.Context, field gra
 	}
 	res := resTmp.([]*model.UserEdge)
 	fc.Result = res
-	return ec.marshalOUserEdge2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐUserEdge(ctx, field.Selections, res)
+	return ec.marshalOUserEdge2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐUserEdge(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserConnection_nodes(ctx context.Context, field graphql.CollectedField, obj *model.UserConnection) (ret graphql.Marshaler) {
@@ -1596,7 +1596,7 @@ func (ec *executionContext) _UserConnection_nodes(ctx context.Context, field gra
 	}
 	res := resTmp.([]*model.User)
 	fc.Result = res
-	return ec.marshalOUser2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalOUser2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *model.UserConnection) (ret graphql.Marshaler) {
@@ -1631,7 +1631,7 @@ func (ec *executionContext) _UserConnection_pageInfo(ctx context.Context, field 
 	}
 	res := resTmp.(*model.PageInfo)
 	fc.Result = res
-	return ec.marshalNPageInfo2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐPageInfo(ctx, field.Selections, res)
+	return ec.marshalNPageInfo2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐPageInfo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *model.UserConnection) (ret graphql.Marshaler) {
@@ -1736,7 +1736,7 @@ func (ec *executionContext) _UserEdge_node(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) ___Directive_name(ctx context.Context, field graphql.CollectedField, obj *introspection.Directive) (ret graphql.Marshaler) {
@@ -2836,7 +2836,7 @@ func (ec *executionContext) unmarshalInputTodoOrder(ctx context.Context, obj int
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("field"))
-			it.Field, err = ec.unmarshalOTodoOrderField2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐTodoOrderField(ctx, v)
+			it.Field, err = ec.unmarshalOTodoOrderField2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐTodoOrderField(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -2844,7 +2844,7 @@ func (ec *executionContext) unmarshalInputTodoOrder(ctx context.Context, obj int
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("direction"))
-			it.Direction, err = ec.unmarshalOOrderDirection2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐOrderDirection(ctx, v)
+			it.Direction, err = ec.unmarshalOOrderDirection2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐOrderDirection(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -2864,7 +2864,7 @@ func (ec *executionContext) unmarshalInputUserOrder(ctx context.Context, obj int
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("field"))
-			it.Field, err = ec.unmarshalOUserOrderField2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐUserOrderField(ctx, v)
+			it.Field, err = ec.unmarshalOUserOrderField2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐUserOrderField(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -2872,7 +2872,7 @@ func (ec *executionContext) unmarshalInputUserOrder(ctx context.Context, obj int
 			var err error
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("direction"))
-			it.Direction, err = ec.unmarshalOOrderDirection2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐOrderDirection(ctx, v)
+			it.Direction, err = ec.unmarshalOOrderDirection2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐOrderDirection(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3563,7 +3563,7 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 	return res
 }
 
-func (ec *executionContext) marshalNPageInfo2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐPageInfo(ctx context.Context, sel ast.SelectionSet, v *model.PageInfo) graphql.Marshaler {
+func (ec *executionContext) marshalNPageInfo2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐPageInfo(ctx context.Context, sel ast.SelectionSet, v *model.PageInfo) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -3588,7 +3588,7 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
-func (ec *executionContext) marshalNTodo2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐTodo(ctx context.Context, sel ast.SelectionSet, v *model.Todo) graphql.Marshaler {
+func (ec *executionContext) marshalNTodo2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐTodo(ctx context.Context, sel ast.SelectionSet, v *model.Todo) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -3598,11 +3598,11 @@ func (ec *executionContext) marshalNTodo2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphql�
 	return ec._Todo(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNTodoConnection2githubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐTodoConnection(ctx context.Context, sel ast.SelectionSet, v model.TodoConnection) graphql.Marshaler {
+func (ec *executionContext) marshalNTodoConnection2githubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐTodoConnection(ctx context.Context, sel ast.SelectionSet, v model.TodoConnection) graphql.Marshaler {
 	return ec._TodoConnection(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNTodoConnection2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐTodoConnection(ctx context.Context, sel ast.SelectionSet, v *model.TodoConnection) graphql.Marshaler {
+func (ec *executionContext) marshalNTodoConnection2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐTodoConnection(ctx context.Context, sel ast.SelectionSet, v *model.TodoConnection) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -3612,12 +3612,12 @@ func (ec *executionContext) marshalNTodoConnection2ᚖgithubᚗcomᚋsoᚑheee�
 	return ec._TodoConnection(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNTodoOrder2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐTodoOrder(ctx context.Context, v interface{}) (*model.TodoOrder, error) {
+func (ec *executionContext) unmarshalNTodoOrder2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐTodoOrder(ctx context.Context, v interface{}) (*model.TodoOrder, error) {
 	res, err := ec.unmarshalInputTodoOrder(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -3627,11 +3627,11 @@ func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphql�
 	return ec._User(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNUserConnection2githubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐUserConnection(ctx context.Context, sel ast.SelectionSet, v model.UserConnection) graphql.Marshaler {
+func (ec *executionContext) marshalNUserConnection2githubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐUserConnection(ctx context.Context, sel ast.SelectionSet, v model.UserConnection) graphql.Marshaler {
 	return ec._UserConnection(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNUserConnection2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐUserConnection(ctx context.Context, sel ast.SelectionSet, v *model.UserConnection) graphql.Marshaler {
+func (ec *executionContext) marshalNUserConnection2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐUserConnection(ctx context.Context, sel ast.SelectionSet, v *model.UserConnection) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -3641,7 +3641,7 @@ func (ec *executionContext) marshalNUserConnection2ᚖgithubᚗcomᚋsoᚑheee�
 	return ec._UserConnection(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNUserOrder2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐUserOrder(ctx context.Context, v interface{}) (*model.UserOrder, error) {
+func (ec *executionContext) unmarshalNUserOrder2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐUserOrder(ctx context.Context, v interface{}) (*model.UserOrder, error) {
 	res, err := ec.unmarshalInputUserOrder(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
@@ -3929,7 +3929,7 @@ func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.Sele
 	return graphql.MarshalInt(*v)
 }
 
-func (ec *executionContext) unmarshalOOrderDirection2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐOrderDirection(ctx context.Context, v interface{}) (*model.OrderDirection, error) {
+func (ec *executionContext) unmarshalOOrderDirection2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐOrderDirection(ctx context.Context, v interface{}) (*model.OrderDirection, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -3938,7 +3938,7 @@ func (ec *executionContext) unmarshalOOrderDirection2ᚖgithubᚗcomᚋsoᚑheee
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOOrderDirection2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐOrderDirection(ctx context.Context, sel ast.SelectionSet, v *model.OrderDirection) graphql.Marshaler {
+func (ec *executionContext) marshalOOrderDirection2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐOrderDirection(ctx context.Context, sel ast.SelectionSet, v *model.OrderDirection) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -3969,7 +3969,7 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	return graphql.MarshalString(*v)
 }
 
-func (ec *executionContext) marshalOTodo2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐTodo(ctx context.Context, sel ast.SelectionSet, v []*model.Todo) graphql.Marshaler {
+func (ec *executionContext) marshalOTodo2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐTodo(ctx context.Context, sel ast.SelectionSet, v []*model.Todo) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -3996,7 +3996,7 @@ func (ec *executionContext) marshalOTodo2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgraphq
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOTodo2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐTodo(ctx, sel, v[i])
+			ret[i] = ec.marshalOTodo2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐTodo(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -4009,14 +4009,14 @@ func (ec *executionContext) marshalOTodo2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgraphq
 	return ret
 }
 
-func (ec *executionContext) marshalOTodo2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐTodo(ctx context.Context, sel ast.SelectionSet, v *model.Todo) graphql.Marshaler {
+func (ec *executionContext) marshalOTodo2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐTodo(ctx context.Context, sel ast.SelectionSet, v *model.Todo) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Todo(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOTodoEdge2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐTodoEdge(ctx context.Context, sel ast.SelectionSet, v []*model.TodoEdge) graphql.Marshaler {
+func (ec *executionContext) marshalOTodoEdge2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐTodoEdge(ctx context.Context, sel ast.SelectionSet, v []*model.TodoEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -4043,7 +4043,7 @@ func (ec *executionContext) marshalOTodoEdge2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgr
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOTodoEdge2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐTodoEdge(ctx, sel, v[i])
+			ret[i] = ec.marshalOTodoEdge2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐTodoEdge(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -4056,14 +4056,14 @@ func (ec *executionContext) marshalOTodoEdge2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgr
 	return ret
 }
 
-func (ec *executionContext) marshalOTodoEdge2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐTodoEdge(ctx context.Context, sel ast.SelectionSet, v *model.TodoEdge) graphql.Marshaler {
+func (ec *executionContext) marshalOTodoEdge2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐTodoEdge(ctx context.Context, sel ast.SelectionSet, v *model.TodoEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._TodoEdge(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOTodoOrder2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐTodoOrderᚄ(ctx context.Context, v interface{}) ([]*model.TodoOrder, error) {
+func (ec *executionContext) unmarshalOTodoOrder2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐTodoOrderᚄ(ctx context.Context, v interface{}) ([]*model.TodoOrder, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -4079,7 +4079,7 @@ func (ec *executionContext) unmarshalOTodoOrder2ᚕᚖgithubᚗcomᚋsoᚑheee�
 	res := make([]*model.TodoOrder, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNTodoOrder2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐTodoOrder(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNTodoOrder2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐTodoOrder(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -4087,7 +4087,7 @@ func (ec *executionContext) unmarshalOTodoOrder2ᚕᚖgithubᚗcomᚋsoᚑheee�
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalOTodoOrderField2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐTodoOrderField(ctx context.Context, v interface{}) (*model.TodoOrderField, error) {
+func (ec *executionContext) unmarshalOTodoOrderField2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐTodoOrderField(ctx context.Context, v interface{}) (*model.TodoOrderField, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -4096,14 +4096,14 @@ func (ec *executionContext) unmarshalOTodoOrderField2ᚖgithubᚗcomᚋsoᚑheee
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOTodoOrderField2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐTodoOrderField(ctx context.Context, sel ast.SelectionSet, v *model.TodoOrderField) graphql.Marshaler {
+func (ec *executionContext) marshalOTodoOrderField2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐTodoOrderField(ctx context.Context, sel ast.SelectionSet, v *model.TodoOrderField) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v []*model.User) graphql.Marshaler {
+func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v []*model.User) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -4130,7 +4130,7 @@ func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgraphq
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOUser2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐUser(ctx, sel, v[i])
+			ret[i] = ec.marshalOUser2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐUser(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -4143,14 +4143,14 @@ func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgraphq
 	return ret
 }
 
-func (ec *executionContext) marshalOUser2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
+func (ec *executionContext) marshalOUser2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._User(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOUserEdge2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐUserEdge(ctx context.Context, sel ast.SelectionSet, v []*model.UserEdge) graphql.Marshaler {
+func (ec *executionContext) marshalOUserEdge2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐUserEdge(ctx context.Context, sel ast.SelectionSet, v []*model.UserEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -4177,7 +4177,7 @@ func (ec *executionContext) marshalOUserEdge2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgr
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOUserEdge2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐUserEdge(ctx, sel, v[i])
+			ret[i] = ec.marshalOUserEdge2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐUserEdge(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -4190,14 +4190,14 @@ func (ec *executionContext) marshalOUserEdge2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgr
 	return ret
 }
 
-func (ec *executionContext) marshalOUserEdge2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐUserEdge(ctx context.Context, sel ast.SelectionSet, v *model.UserEdge) graphql.Marshaler {
+func (ec *executionContext) marshalOUserEdge2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐUserEdge(ctx context.Context, sel ast.SelectionSet, v *model.UserEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._UserEdge(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOUserOrder2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐUserOrderᚄ(ctx context.Context, v interface{}) ([]*model.UserOrder, error) {
+func (ec *executionContext) unmarshalOUserOrder2ᚕᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐUserOrderᚄ(ctx context.Context, v interface{}) ([]*model.UserOrder, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -4213,7 +4213,7 @@ func (ec *executionContext) unmarshalOUserOrder2ᚕᚖgithubᚗcomᚋsoᚑheee�
 	res := make([]*model.UserOrder, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNUserOrder2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐUserOrder(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNUserOrder2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐUserOrder(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -4221,7 +4221,7 @@ func (ec *executionContext) unmarshalOUserOrder2ᚕᚖgithubᚗcomᚋsoᚑheee�
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalOUserOrderField2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐUserOrderField(ctx context.Context, v interface{}) (*model.UserOrderField, error) {
+func (ec *executionContext) unmarshalOUserOrderField2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐUserOrderField(ctx context.Context, v interface{}) (*model.UserOrderField, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -4230,7 +4230,7 @@ func (ec *executionContext) unmarshalOUserOrderField2ᚖgithubᚗcomᚋsoᚑheee
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOUserOrderField2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋgraphᚋmodelᚐUserOrderField(ctx context.Context, sel ast.SelectionSet, v *model.UserOrderField) graphql.Marshaler {
+func (ec *executionContext) marshalOUserOrderField2ᚖgithubᚗcomᚋsoᚑheeeᚋgraphqlᚑexampleᚋplan2ᚋdomainᚋmodelᚐUserOrderField(ctx context.Context, sel ast.SelectionSet, v *model.UserOrderField) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

@@ -1,8 +1,6 @@
 package infrastructure
 
 import (
-	"fmt"
-
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/go-chi/chi"
@@ -15,7 +13,13 @@ import (
 	"github.com/so-heee/graphql-example/plan2/interfaces/database"
 )
 
-func (s *Server) Router(dsn string) *chi.Mux {
+func Router(repo *database.Repository) *chi.Mux {
+
+	r := chi.NewRouter()
+
+	/*
+	 * Middleware settings
+	 */
 
 	// Use JSON logger
 	customLogger := logrus.New()
@@ -24,23 +28,19 @@ func (s *Server) Router(dsn string) *chi.Mux {
 		DisableTimestamp: true,
 	}
 
-	//dsn := os.Getenv("MYSQL_USER") + ":password@tcp(db:3306)/sample?charset=utf8mb4&parseTime=True&loc=Local"
-	repo, err := database.NewRepository(dsn)
-	if err != nil {
-		fmt.Errorf("failed to create repository: %+v", err)
-	}
-	resolver := resolver.NewResolver(repo)
+	r.Use(middleware.Logger)
+	r.Use(middleware.Recoverer)
+	r.Use(render.SetContentType(render.ContentTypeJSON))
 
-	s.router.Use(middleware.Logger)
-	s.router.Use(middleware.Recoverer)
+	/*
+	 * Routing settings
+	 */
 
-	s.router.Use(render.SetContentType(render.ContentTypeJSON))
+	// GraphQL endpoint
+	r.Handle("/query", handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: resolver.NewResolver(repo)})))
 
-	graphqlHandler := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: resolver}))
-	playgroundHandler := playground.Handler("GraphQL Playground", "/query")
+	// GraphQL playground
+	r.Handle("/playground", playground.Handler("GraphQL Playground", "/query"))
 
-	s.router.Handle("/query", graphqlHandler)
-	s.router.Handle("/playground", playgroundHandler)
-
-	return s.router
+	return r
 }

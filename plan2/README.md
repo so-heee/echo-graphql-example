@@ -57,3 +57,4 @@ https://github.com/ctrlxc/graphql-example/blob/main/src/repository/repository.go
 https://github.com/shufo/go-graphql-boilerplate/blob/master/resolver/user_resolver.go
 https://github.com/graphql/graphiql/blob/39f5e45a9d2bb469260b62ff8057cc988d853470/packages/graphql-language-service-parser/benchmark/fixtures/github.graphql
 https://github.com/jjjjackson/gqlgen-example/blob/master/presentation/schema/user.graphqls
+https://github.com/kshamiev/sungora_history/blob/9434595e79630110f0c20dbdf73fd66a2f72bbad/pkg/app/database.go

@@ -7,9 +7,8 @@ import (
 	"context"
 	"strconv"
 
+	"github.com/so-heee/graphql-example/plan2/domain/model"
 	"github.com/so-heee/graphql-example/plan2/graph/generated"
-	"github.com/so-heee/graphql-example/plan2/graph/model"
-	"github.com/so-heee/graphql-example/plan2/graph/pagination"
 )
 
 func (r *queryResolver) Todo(ctx context.Context, id *int) (*model.Todo, error) {
@@ -27,7 +26,7 @@ func (r *queryResolver) Todo(ctx context.Context, id *int) (*model.Todo, error) 
 }
 
 func (r *queryResolver) Todos(ctx context.Context, after *string, before *string, first *int, last *int, orderBy []*model.TodoOrder) (*model.TodoConnection, error) {
-	paginator := pagination.NewPaginator(
+	paginator := model.NewPaginator(
 		after,
 		before,
 		first,
@@ -98,7 +97,7 @@ func (r *queryResolver) Todos(ctx context.Context, after *string, before *string
 }
 
 func (r *queryResolver) Users(ctx context.Context, after *string, before *string, first *int, last *int, orderBy []*model.UserOrder) (*model.UserConnection, error) {
-	paginator := pagination.NewPaginator(
+	paginator := model.NewPaginator(
 		after,
 		before,
 		first,
