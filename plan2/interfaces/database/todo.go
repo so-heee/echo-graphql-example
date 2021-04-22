@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/so-heee/graphql-example/plan2/graph/pagination"
-	"github.com/so-heee/graphql-example/plan2/models"
+	"github.com/so-heee/graphql-example/plan2/infrastructure/database/models"
 )
 
 func (r *Repository) TodoByID(ctx context.Context, id *int) (*models.Todo, error) {

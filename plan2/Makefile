@@ -6,6 +6,10 @@ LOCAL_INSTANCE_CONNECTION_NAME := tcp\(127.0.0.1:3306\)/sample
 generate:
 	go run github.com/99designs/gqlgen generate
 
+.PHONY: boil
+boil:
+	sqlboiler mysql
+
 .PHONY: run
 run:
 	DB_USER=$(LOCAL_DB_USER) \

@@ -1,3 +1,5 @@
+pkgname="models"
+output="infrastructure/database/models"
 [mysql]
   dbname="sample"
   host="localhost"
