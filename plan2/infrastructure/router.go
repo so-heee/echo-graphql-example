@@ -10,6 +10,7 @@ import (
 	"github.com/so-heee/graphql-example/plan2/graph/generated"
 	"github.com/so-heee/graphql-example/plan2/graph/resolver"
 
+	"github.com/rs/cors"
 	"github.com/so-heee/graphql-example/plan2/interfaces/database"
 )
 
@@ -27,6 +28,12 @@ func Router(repo *database.Repository) *chi.Mux {
 		// disable, as we set our own
 		DisableTimestamp: true,
 	}
+
+	r.Use(cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:3000"},
+		AllowCredentials: true,
+		Debug:            true,
+	}).Handler)
 
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)

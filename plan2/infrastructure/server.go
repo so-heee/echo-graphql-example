@@ -36,6 +36,6 @@ func Run() {
 	}
 	r := Router(repo)
 
-	log.Printf("connect to http://localhost:8080/prayground for GraphQL playground")
+	log.Printf("connect to http://localhost:8080/playground for GraphQL playground")
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
